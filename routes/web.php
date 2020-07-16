@@ -24,3 +24,16 @@ Route::get('/login', function () {
 Route::get('/try', function () {
     return view('try');
 });
+
+Route::get('/viewcart', function () {
+    return view('viewcart');
+});
+
+Route::get('/varun', function () {
+    return view('varun');
+});
+
+
+Route::get('/users', 'Users@index');
+
+Route::get('/products', 'products@index');
