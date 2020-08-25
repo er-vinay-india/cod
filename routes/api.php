@@ -14,6 +14,52 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/sum', 'sum@index');
+
+// POST METHOD ROUTES
+Route::post('/user', 'UserController@add');
+Route::post('/address', 'AddressController@add');
+Route::post('/order', 'OrderController@add');
+Route::post('/orderproduct', 'OrderProductController@add');
+Route::post('/productfeature', 'ProductFeatureController@add');
+Route::post('/product', 'ProductController@add');
+
+
+// GET METHOD ROUTES
+Route::get('/user', 'UserController@get');
+Route::get('/user/{args}', 'UserController@get');
+Route::get('/user/{args}/{args2}', 'UserController@get');
+
+Route::get('/product', 'ProductController@get');
+Route::get('/product/{args}', 'ProductController@get');
+Route::get('/product/{args}/{args2}', 'ProductController@get');
+
+Route::get('/address', 'AddressController@get');
+Route::get('/address/{args}', 'AddressController@get');
+Route::get('/address/{args}/{args2}', 'AddressController@get');
+
+
+Route::get('/orderproduct', 'OrderProductController@get');
+Route::get('/orderproduct/{args}', 'OrderProductController@get');
+Route::get('/orderproduct/{args}/{args2}', 'OrderProductController@get');
+
+Route::get('/productfeature', 'ProductFeatureController@get');
+Route::get('/productfeature/{args}', 'ProductFeatureController@get');
+Route::get('/productfeature/{args}/{args2}', 'ProductFeatureController@get');
+
+
+Route::get('/order', 'OrderController@get');
+Route::get('/order/{args}', 'OrderController@get');
+Route::get('/order/{args}/{args2}', 'OrderController@get');
+
+
+
+Route::get('/orders', 'Order@index');
+
+Route::post('/login', 'Login@index');
+
+Route::post('/address', 'address@index');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

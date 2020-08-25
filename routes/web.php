@@ -20,6 +20,9 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('login');
 });
+Route::get('/address', function () {
+    return view('address');
+});
 
 Route::get('/try', function () {
     return view('try');
@@ -33,7 +36,6 @@ Route::get('/varun', function () {
     return view('varun');
 });
 
-
-Route::get('/users', 'Users@index');
-
-Route::get('/products', 'products@index');
+Route::get('/sum', function () {
+    return view('sum');
+});
