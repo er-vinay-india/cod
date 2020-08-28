@@ -77,6 +77,10 @@ class Entities
 
         foreach($this->attribute_map as $key => $value) {
             
+            if( !isset($data_results[$key]) ) {
+                continue;
+            }
+
             $entity_value = $data_results[$key];
             
             if(in_array($key, $this->serialize_map)) {
