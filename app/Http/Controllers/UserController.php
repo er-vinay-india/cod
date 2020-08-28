@@ -20,12 +20,11 @@ class UserController extends Controller
         }
 
         $offset = $request->input('offset') ? $request->input('offset') : 0;
-        $limit = $request->input('limit') ? $request->input('limit') : 1;
+        $limit = $request->input('limit') ? $request->input('limit') : 10;
 
         /** @var App\Managers\UserManager $manager */
 
         $manager = new UserManager();
-        $address= new Address();
 
         switch ($arg[0]) {
             case 'all':

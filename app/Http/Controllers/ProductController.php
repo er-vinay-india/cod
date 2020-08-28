@@ -18,7 +18,7 @@ class ProductController extends Controller
         }
 
         $offset = $request->input('offset') ? $request->input('offset') : 0;
-        $limit = $request->input('limit') ? $request->input('limit') : 1;
+        $limit = $request->input('limit') ? $request->input('limit') : 10;
 
         /** @var App\Managers\ProductManager $manager */
         $manager = new ProductManager();
