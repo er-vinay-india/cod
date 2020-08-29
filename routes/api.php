@@ -24,6 +24,11 @@ Route::post('/orderproduct', 'OrderProductController@add');
 Route::post('/productfeature', 'ProductFeatureController@add');
 Route::post('/product', 'ProductController@add');
 
+Route::post('/user/delete', 'UserController@delete');
+
+// delete 
+Route::delete('/user/{user_guid}', 'UserController@delete');
+
 
 // GET METHOD ROUTES
 Route::get('/user', 'UserController@get');
@@ -52,11 +57,11 @@ Route::get('/order', 'OrderController@get');
 Route::get('/order/{args}', 'OrderController@get');
 Route::get('/order/{args}/{args2}', 'OrderController@get');
 
-
-
 Route::get('/orders', 'Order@index');
 
-Route::post('/login', 'Login@index');
+Route::post('/login', 'AuthController@login');
+Route::post('/logout', 'AuthController@logout');
+Route::post('/registration', 'AuthController@registration');
 
 Route::post('/address', 'address@index');
 

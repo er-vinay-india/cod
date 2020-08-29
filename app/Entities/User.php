@@ -15,6 +15,8 @@ class User extends Entities {
     protected $favourite_item = '';
     protected $no_of_order = 0;
     protected $password;
+    
+    private $token = null;
 
     public function __construct($guid = null) {
 
@@ -104,10 +106,40 @@ class User extends Entities {
     }
 
     public function setPassword($value) {
-        $this->password = md5($value);
+        $this->password = $value;
     }
 
     public function getPassword() {
         return $this->password;
+    }
+
+    public function createToken($salt = 'COD PASSPORT GRANT CLIENT') {
+        $token = new Token();
+        $token->setUserGuid($this->guid);
+        $token->setAccessToken(\App\Libraries\PassportLibrary::createHash($this->guid, $salt, time()));
+        $token->setCreatedAt(time());
+        $token->save();
+        $this->token = $token;
+
+        // Add To Session
+        session([
+            '__user__' => serialize($this)
+        ]);
+        return $token;
+    }
+
+    public function getToken() {
+        if(!session('__user__')) {
+            return null;
+        }
+
+        $serialized_user = session('__user__');
+        $user = unserialize($serialized_user);
+        
+        if(!$user->token) {
+            return null;
+        }
+        
+        return $user->token;
     }
 }

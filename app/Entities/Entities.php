@@ -11,6 +11,7 @@ class Entities
     public $time_created;
     public $time_updated;
     
+    protected $table = 'entities';
     protected $entity_type;
     protected $attribute_map = [];
     protected $json_map = [];
@@ -61,7 +62,7 @@ class Entities
 
     public function load($options = []) 
     {
-        $response = DB::select('SELECT * FROM entities WHERE guid = ?', [
+        $response = DB::select('SELECT * FROM ' . $this->table . ' WHERE guid = ?', [
             $this->guid
         ]); 
         
@@ -141,9 +142,9 @@ class Entities
             ];
         }
 
-        DB::table('entities')->insert($insert_data);
+        DB::table($this->table)->insert($insert_data);
 
-        DB::insert("INSERT INTO entities_index(keyword, guid) VALUES(?, ?)", [
+        DB::insert("INSERT INTO " . $this->table . "_index(keyword, guid) VALUES(?, ?)", [
             $this->entity_type,
             $this->guid
         ]);
@@ -161,9 +162,15 @@ class Entities
             return false;
         }
 
-        return DB::delete('DELETE FROM entities WHERE guid = ?', [
+        if(DB::delete('DELETE FROM ' . $this->table . ' WHERE guid = ?', [
             $this->guid
-        ]);
+        ])) {
+            return DB::delete('DELETE FROM ' . $this->table . '_index WHERE guid = ?', [
+                $this->guid
+            ]);
+        }
+
+        return false;
     }
 
     public function export() 

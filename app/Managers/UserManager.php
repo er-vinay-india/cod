@@ -2,13 +2,15 @@
 
 namespace App\Managers;
 
+use App\Entities\Factory;
 use Illuminate\Support\Facades\DB;
-
 use App\Entities\User;
 
 class UserManager {
-    public function get($guid) {
-        $user = new User($guid);
+
+    public function getUser($guid) {
+        
+        $user = Factory::build('user', $guid);
 
         if(!$user) {
             return false;
@@ -17,23 +19,26 @@ class UserManager {
         return $user->export();
     }
 
-    public function getAll($options = []) {
+    public function getUsers($options = []) {
 
         $indexes = DB::select("SELECT * FROM entities_index WHERE keyword = 'user' LIMIT " . $options['limit'] . " OFFSET " . $options['offset']);
 
         $users = [];
 
         foreach($indexes as $index) {
-            if($this->get($index->guid)) {
-                $users[] = $this->get($index->guid);
+            if($this->getUser($index->guid)) {
+                $users[] = $this->getUser($index->guid);
             }
         }
 
         return $users;
     }
 
-    public function add() {
-        
+    public function addUser(User $user) {
+
+        // Any Business Logic
+
+        $user->save();
     }
 
     public function checkEmailExists($email) {
@@ -58,5 +63,10 @@ class UserManager {
         } else {
             return true;
         }
+    }
+    
+    public function deleteUser(string $user_guid) {
+        $user = new User($user_guid);
+        return $user->delete();
     }
 }

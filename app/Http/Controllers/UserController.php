@@ -15,15 +15,16 @@ class UserController extends Controller
         if (!isset($arg[0])) {
             return response()->json([
                 'status' => 'success',
-                'result' => []
+                'result' => [
+
+                ]
             ]);
         }
 
         $offset = $request->input('offset') ? $request->input('offset') : 0;
         $limit = $request->input('limit') ? $request->input('limit') : 10;
 
-        /** @var App\Managers\UserManager $manager */
-
+        /** @var \App\Managers\UserManager $manager */
         $manager = new UserManager();
 
         switch ($arg[0]) {
@@ -35,7 +36,7 @@ class UserController extends Controller
                 ];
 
                 // all products
-                $users = $manager->getAll($options);
+                $users = $manager->getUsers($options);
 
                 return response()->json([
                     'status' => 'success', // notification type
@@ -47,7 +48,7 @@ class UserController extends Controller
             case 'single':
                 // single user 
                 $guid = $arg[1];
-                $user = $manager->get($guid);
+                $user = $manager->getUser($guid);
 
                 return response()->json([
                     'status' => 'success', // notification type
@@ -67,14 +68,14 @@ class UserController extends Controller
 
 
         // validation checking
-        if($manager->checkEmailExists($request->post('email'))) {
+        if ($manager->checkEmailExists($request->post('email'))) {
             return response()->json([
                 'status' => 'error',
                 'result' => [
                     'message' => 'Email already exists!'
                 ]
             ]);
-        }        
+        }
 
         /** @var \App\Entities\User $user */
         $user = new User();
@@ -92,7 +93,7 @@ class UserController extends Controller
         }
 
         $address = [];
-        
+
         if ($request->post('address')) {
 
             $address = new Address();
@@ -116,15 +117,48 @@ class UserController extends Controller
         }
 
         if ($request->post('password')) {
-            $user->setPassword($request->post('password'));
+            $user->setPassword(\App\Libraries\UserLibrary::hash($request->post('password')));
         }
 
-        $user->save();
+        $manager->addUser($user);
 
         return response()->json([
             'status' => 'success',
             'result' => [
                 'message' => 'User added successfully!'
+            ]
+        ]);
+    }
+
+    public function delete(Request $request, $user_guid = null)
+    {
+        $manager = new UserManager();
+
+        if ($request->getMethod() == 'post') {
+            $user_guids = $request->post('user_guids');
+
+            foreach ($user_guids as $user_guid) {
+                $manager->deleteUser($user_guid);
+            }
+
+            $delete = true;
+        } else {
+            $delete = $manager->deleteUser($user_guid);
+        }
+
+        if ($delete) {
+            return response()->json([
+                'status' => 'success',
+                'result' => [
+                    'message' => 'User deleted successfully!'
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'result' => [
+                'message' => 'Deletition Failed!'
             ]
         ]);
     }
