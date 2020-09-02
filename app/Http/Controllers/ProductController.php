@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Factory;
 use Illuminate\Http\Request;
 use App\Managers\ProductManager;
 use App\Entities\Product;
@@ -58,10 +59,13 @@ class ProductController extends Controller
 
     }
 
-    public function add(Request $request) {
+    public function add(Request $request) 
+    {
+         /** @var \App\Managers\ProductManager $manager */
+         $manager = new ProductManager();
 
         /** @var \App\Entities\Product */
-        $product = new Product();
+        $product = Factory::build('product');
         
         if($request->post('title')) {
             $product->setTitle($request->post('title'));

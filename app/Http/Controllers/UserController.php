@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Managers\UserManager;
 use App\Entities\User;
 use App\Entities\Address;
+use App\Entities\Factory;
 
 class UserController extends Controller
 {
@@ -78,14 +79,10 @@ class UserController extends Controller
         }
 
         /** @var \App\Entities\User $user */
-        $user = new User();
+        $user = Factory::build('user');
 
-        if ($request->post('first_name')) {
-            $user->setFirstName($request->post('first_name'));
-        }
-
-        if ($request->post('last_name')) {
-            $user->setLastName($request->post('last_name'));
+        if ($request->post('name')) {
+            $user->setName($request->post('name'));
         }
 
         if ($request->post('contact_no')) {

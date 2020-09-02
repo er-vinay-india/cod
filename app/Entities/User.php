@@ -15,6 +15,7 @@ class User extends Entities {
     protected $favourite_item = '';
     protected $no_of_order = 0;
     protected $password;
+    protected $is_admin = false;
     
     private $token = null;
 
@@ -23,8 +24,7 @@ class User extends Entities {
         $this->entity_type = 'user';
 
         $this->attribute_map = [
-            'first_name' => 'FirstName',
-            'last_name' => 'LastName',
+            'name' => 'Name',
             //'contact_no' => 'ContactNo',
             //'address' => 'Address',
             //'gender' => 'Gender',
@@ -32,9 +32,12 @@ class User extends Entities {
             //'favourite_item' => 'FavouriteItem',
             //'no_of_order' => 'NoOfOrder',
             'password' => 'Password',
+            'is_admin' => 'IsAdmin'
         ];
 
-        $this->json_map = [];
+        $this->json_map = [
+            'is_admin'
+        ];
         $this->serialize_map = [
             'address'
         ];
@@ -42,20 +45,12 @@ class User extends Entities {
         parent::__construct($guid);
     }
 
-    public function setFirstName($value) {
-        $this->first_name = $value;
+    public function setName($value) {
+        $this->name = $value;
     }
 
-    public function getFirstName() {
-        return $this->first_name;
-    }
-
-    public function setLastName($value) {
-        $this->last_name = $value;
-    }
-
-    public function getLastName() {
-        return $this->last_name;
+    public function getName() {
+        return $this->name;
     }
 
     public function setContactNo($value) {
@@ -71,6 +66,14 @@ class User extends Entities {
     
     public function getAddress() {
         return $this->address;
+    }
+
+    public function setIsAdmin($value) {
+        $this->is_admin = $value;
+    }
+
+    public function getIsAdmin() {
+        return $this->is_admin;
     }
 
     public function setGender($value) {

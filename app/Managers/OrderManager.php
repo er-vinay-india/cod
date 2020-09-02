@@ -2,13 +2,14 @@
 
 namespace App\Managers;
 
+use App\Entities\Factory;
 use Illuminate\Support\Facades\DB;
 
 use App\Entities\Order;
 
 class OrderManager {
     public function get($guid) {
-        $order = new Order($guid);
+        $order = Factory::build('order', $guid);
 
         if(!$order) {
             return false;
@@ -32,7 +33,7 @@ class OrderManager {
         return $orders;
     }
 
-    public function add() {
-
+    public function save(Order $order) {
+        $order->save();
     }
 }
