@@ -6,8 +6,7 @@ use App\Entities\Entities;
 
 class User extends Entities {
     
-    protected $first_name;
-    protected $last_name;
+    protected $name;
     protected $conatct_no;
     protected $address;
     protected $gender;
