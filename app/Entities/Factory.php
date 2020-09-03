@@ -4,12 +4,12 @@ use App\Entities\Interfaces\FactoryDesignPattern;
 
 class Factory implements FactoryDesignPattern {
     
-    public static function build($entity_type, $user_guid = null) {
+    public static function build($entity_type, $guid = null) {
         $entity_type = self::enhance($entity_type);
 
         if(class_exists('\\App\Entities\\' . $entity_type)) {
             $classname = '\\App\\Entities\\' . $entity_type;
-            return new $classname($user_guid);
+            return new $classname($guid);
         }
     }
 
