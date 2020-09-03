@@ -48,22 +48,8 @@ class AuthController extends Controller
         $manager = new UserManager();
         $manager->addUser($user);
 
-        // Generate Session
-        session([
-            '__user__' => serialize($user)
-        ]);
-
         // Authorization
-        $token = $user->createToken();
-
-        return response()->json([
-            'status' => 'Success',
-            'result' => [
-                'user' => $user->export(),
-                'user_guid' => $user->getGuid(),
-                'access_token' => $token->getAccessToken()
-            ]
-        ]);
+        return $this->authorization($user);
     }
 
     public function login(Request $request) {
@@ -91,6 +77,10 @@ class AuthController extends Controller
         }
 
         // Authorization
+        return $this->authorization($user);
+    }
+
+    private function authorization($user) {
         $token = $user->createToken();
 
         if(!$token) {
