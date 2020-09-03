@@ -28,12 +28,8 @@ class AuthController extends Controller
         /** \App\Entities\User $user */
         $user = Factory::build('user');
 
-        if ($request->post('first_name')) {
-            $user->setFirstName($request->post('first_name'));
-        }
-
-        if ($request->post('last_name')) {
-            $user->setLastName($request->post('last_name'));
+        if ($request->post('name')) {
+            $user->setName($request->post('name'));
         }
 
         if ($request->post('email')) {
