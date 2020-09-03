@@ -123,26 +123,15 @@ class User extends Entities {
         $token->setCreatedAt(time());
         $token->save();
         $this->token = $token;
-
-        // Add To Session
-        session([
-            '__user__' => serialize($this)
-        ]);
         return $token;
     }
 
     public function getToken() {
-        if(!session('__user__')) {
-            return null;
+        if($this->token) {
+            return $this->token;
         }
 
-        $serialized_user = session('__user__');
-        $user = unserialize($serialized_user);
-        
-        if(!$user->token) {
-            return null;
-        }
-        
-        return $user->token;
+        $token = Token::getToken($this->guid);
+        return $token;
     }
 }

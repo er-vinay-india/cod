@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Entities\Entities;
+use Illuminate\Support\Facades\DB;
 
 class Token extends Entities {
     protected $user_guid;
@@ -55,8 +56,26 @@ class Token extends Entities {
             $token
         ]);
 
-        $token_guid = '';
-        $token = new Token($token_guid);
-        return $token;
+        if(isset($response[0])) {
+            $token_guid = $response[0]->guid;
+            $token = new Token($token_guid);
+            return $token;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getToken($user_guid) {
+        $response = DB::select("SELECT * FROM token WHERE keyword = 'user_guid' AND value = ?", [
+            $user_guid
+        ]);
+
+        if(isset($response[0])) {
+            $token_guid = $response[0]->guid;
+            $token = new Token($token_guid);
+            return $token;
+        } else {
+            return false;
+        }
     }
 }

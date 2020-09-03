@@ -90,13 +90,17 @@ class AuthController extends Controller
             ]);
         }
 
-        // Generate Session
-        session([
-            '__user__' => serialize($user)
-        ]);
-
         // Authorization
         $token = $user->createToken();
+
+        if(!$token) {
+            return response()->json([
+                'status' => 'error',
+                'result' => [
+                    'message' => 'Something Went Wrong!'
+                ]
+            ]);
+        } 
 
         return response()->json([
             'status' => 'Success',

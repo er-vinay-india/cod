@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Entities\Factory;
 use Closure;
 
 class ImmigrationMiddleware
@@ -18,16 +19,8 @@ class ImmigrationMiddleware
 
         // Is User Athenticated?
         $authorization = $request->header('Authorization');
-        
-        if(!session('__user__')) {
-            return response()->json([
-                'status' => 'error',
-                'result' => [
-                    'message' => 'Access Denied'
-                ]
-            ]); 
-        }
-        
+        $authorization = trim(str_replace('Bearer','', $authorization));
+
         $token = \App\Entities\Token::check($authorization);
 
         if(!$token) {
@@ -37,14 +30,13 @@ class ImmigrationMiddleware
                     'message' => 'Access Denied'
                 ]
             ]);
-        }
-
-        if($token->getUserGuid() != session('__user__')->getGuid()) {
-            return response()->json([
-                'status' => 'error',
-                'result' => [
-                    'message' => 'Access Denied'
-                ]
+        } else {
+            $user_guid = $token->getUserGuid();
+            $user = Factory::build('user', $user_guid);
+            
+            // Generate Session
+            session([
+                '__user__' => serialize($user)
             ]);
         }
 

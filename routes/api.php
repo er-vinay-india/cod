@@ -35,9 +35,16 @@ Route::get('/user', 'UserController@get');
 Route::get('/user/{args}', 'UserController@get');
 Route::get('/user/{args}/{args2}', 'UserController@get');
 
-Route::get('/product', 'ProductController@get');
-Route::get('/product/{args}', 'ProductController@get');
-Route::get('/product/{args}/{args2}', 'ProductController@get');
+Route::post('/login', 'AuthController@login');
+Route::post('/registration', 'AuthController@registration');
+
+Route::middleware(['cod.auth'])->group(function () {
+    Route::get('/product', 'ProductController@get');
+    Route::get('/product/{args}', 'ProductController@get');
+    Route::get('/product/{args}/{args2}', 'ProductController@get');
+    Route::post('/logout', 'AuthController@logout');
+});
+
 
 Route::get('/address', 'AddressController@get');
 Route::get('/address/{args}', 'AddressController@get');
@@ -58,11 +65,6 @@ Route::get('/order/{args}', 'OrderController@get');
 Route::get('/order/{args}/{args2}', 'OrderController@get');
 
 Route::get('/orders', 'Order@index');
-
-Route::post('/login', 'AuthController@login');
-Route::post('/logout', 'AuthController@logout');
-Route::post('/registration', 'AuthController@registration');
-
 Route::post('/address', 'address@index');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
