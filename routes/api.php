@@ -37,11 +37,11 @@ Route::get('/user/{args}/{args2}', 'UserController@get');
 
 Route::post('/login', 'AuthController@login');
 Route::post('/registration', 'AuthController@registration');
+Route::get('/product', 'ProductController@get');
+Route::get('/product/{args}', 'ProductController@get');
+Route::get('/product/{args}/{args2}', 'ProductController@get');
 
 Route::middleware(['cod.auth'])->group(function () {
-    Route::get('/product', 'ProductController@get');
-    Route::get('/product/{args}', 'ProductController@get');
-    Route::get('/product/{args}/{args2}', 'ProductController@get');
     Route::post('/logout', 'AuthController@logout');
 });
 
