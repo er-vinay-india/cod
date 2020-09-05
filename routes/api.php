@@ -29,6 +29,7 @@ Route::post('/user/delete', 'UserController@delete');
 // delete 
 Route::delete('/user/{user_guid}', 'UserController@delete');
 Route::delete('/product/{product_guid}', 'ProductController@delete');
+Route::delete('/order/{order_guid}', 'OrderController@delete');
 
 
 // GET METHOD ROUTES

@@ -33,7 +33,8 @@ class OrderManager {
         return $orders;
     }
 
-    public function save(Order $order) {
-        $order->save();
+    public function deleteOrder(string $order_guid) {
+        $order = new Order($order_guid);
+        return $order->delete();
     }
 }

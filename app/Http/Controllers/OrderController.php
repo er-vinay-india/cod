@@ -58,13 +58,19 @@ class OrderController extends Controller
         }
     }
 
-    public function add(Request $request)
+    public function post(Request $request)
     {
         /** @var \App\Managers\OrderManager */
         $manager = new OrderManager();
 
-        /** @var \App\Entities\Order */
-        $order = Factory::build('order');
+        if($request->post('guid') && $request->post('guid') != '') {
+            // edit the order
+            /** @var \App\Entities\Order */
+            $order = Factory::build('order', $request->post('guid'));
+        } else {
+            /** @var \App\Entities\Order */
+            $order = Factory::build('order');
+        }
 
         if ($request->post('promo_applied')) {
             $order->setPromoApplied($request->post('promo_applied'));
@@ -95,12 +101,33 @@ class OrderController extends Controller
         }
 
 
-        $manager->save($order);
+        $order->save();
 
         return response()->json([
             'status' => 'success',
             'result' => [
-                'message' => 'User added successfully!'
+                'message' => 'Order added successfully!'
+            ]
+        ]);
+    }
+
+    public function  delete(Request $request, $order_guid) {
+        
+        $manager = new OrderManager();
+        $delete = $manager->deleteOrder($order_guid);
+        if ($delete) {
+            return response()->json([
+                'status' => 'success',
+                'result' => [
+                    'message' => 'Order deleted successfully!'
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'result' => [
+                'message' => 'Deletition Failed!'
             ]
         ]);
     }
@@ -110,6 +137,6 @@ class OrderController extends Controller
         /** @var \App\Entities\Order $order */
         $order = $manager->get($request->post('order_guid'));
         $order->setStatus($request->post('status'));
-        $manager->save($order);
+        $order->save();
     }
 }

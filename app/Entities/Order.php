@@ -4,7 +4,6 @@ namespace App\Entities;
 namespace App\Product;
 
 use App\Entities\Entities;
-use App\Entities\Product;
 
 class Order extends Entities {
     protected $promo_applied;
