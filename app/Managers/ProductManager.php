@@ -35,4 +35,9 @@ class ProductManager {
     public function add() {
 
     }
+
+    public function deleteProduct(string $product_guid) {
+        $product = new Product($product_guid);
+        return $product->delete();
+    }
 }

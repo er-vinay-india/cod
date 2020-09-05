@@ -59,14 +59,21 @@ class ProductController extends Controller
 
     }
 
-    public function add(Request $request) 
+    public function post(Request $request) 
     {
          /** @var \App\Managers\ProductManager $manager */
          $manager = new ProductManager();
 
-        /** @var \App\Entities\Product */
-        $product = Factory::build('product');
-        
+
+        if($request->post('guid') && $request->post('guid') != '') {
+            // edit the product
+            /** @var \App\Entities\Product */
+            $product = Factory::build('product', $request->post('guid'));
+        } else {
+            /** @var \App\Entities\Product */
+            $product = Factory::build('product');
+        }
+
         if($request->post('title')) {
             $product->setTitle($request->post('title'));
         }
@@ -78,15 +85,16 @@ class ProductController extends Controller
         if($request->post('quantity')) {
             $product->setQuantity($request->post('quantity'));
         }
+        
 
         //encoding and decoding images
         
-        $images=array();
+       /*  $images=array();
         foreach($images as $image) {
             json_encode($images);
         }
         $jsonobj = '{}';
-            $images = json_decode($jsonobj, true);
+            $images = json_decode($jsonobj, true); */
 
         $product->save();
 
@@ -94,6 +102,27 @@ class ProductController extends Controller
             'status' => 'success',
             'result' => [
                 'message' => 'Product added successfully!'
+            ]
+        ]);
+    }
+
+    public function  delete(Request $request, $product_guid) {
+        
+        $manager = new ProductManager();
+        $delete = $manager->deleteProduct($product_guid);
+        if ($delete) {
+            return response()->json([
+                'status' => 'success',
+                'result' => [
+                    'message' => 'User deleted successfully!'
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'result' => [
+                'message' => 'Deletition Failed!'
             ]
         ]);
     }
